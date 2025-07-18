@@ -3,15 +3,15 @@
 // 時區工具函數
 function formatBeijingTime(date = new Date(), format = 'full') {
   if (format === 'date') {
-    return date.toLocaleDateString('zh-CN', {
-      timeZone: 'Asia/Shanghai',
+    return date.toLocaleDateString('zh-TW', {
+      timeZone: 'Asia/Taipei',
       year: 'numeric',
       month: '2-digit',
       day: '2-digit'
     });
   } else if (format === 'datetime') {
-    return date.toLocaleString('zh-CN', {
-      timeZone: 'Asia/Shanghai',
+    return date.toLocaleString('zh-TW', {
+      timeZone: 'Asia/Taipei',
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
@@ -21,8 +21,8 @@ function formatBeijingTime(date = new Date(), format = 'full') {
     });
   } else {
     // full format
-    return date.toLocaleString('zh-CN', {
-      timeZone: 'Asia/Shanghai'
+    return date.toLocaleString('zh-TW', {
+      timeZone: 'Asia/Taipei'
     });
   }
 }
@@ -700,15 +700,15 @@ const adminPage = `
     // 時區工具函數 - 前端版本
     function formatBeijingTime(date = new Date(), format = 'full') {
       if (format === 'date') {
-        return date.toLocaleDateString('zh-CN', {
-          timeZone: 'Asia/Shanghai',
+        return date.toLocaleDateString('zh-TW', {
+          timeZone: 'Asia/Taipei',
           year: 'numeric',
           month: '2-digit',
           day: '2-digit'
         });
       } else if (format === 'datetime') {
-        return date.toLocaleString('zh-CN', {
-          timeZone: 'Asia/Shanghai',
+        return date.toLocaleString('zh-TW', {
+          timeZone: 'Asia/Taipei',
           year: 'numeric',
           month: '2-digit',
           day: '2-digit',
@@ -718,8 +718,8 @@ const adminPage = `
         });
       } else {
         // full format
-        return date.toLocaleString('zh-CN', {
-          timeZone: 'Asia/Shanghai'
+        return date.toLocaleString('zh-TW', {
+          timeZone: 'Asia/Taipei'
         });
       }
     }
@@ -3135,7 +3135,7 @@ async function checkExpiringSubscriptions(env) {
   try {
     const now = new Date();
     const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
-    console.log('[定時任務] 開始檢查即將到期的訂閱 UTC: ' + now.toISOString() + ', 北京時間: ' + beijingTime.toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai'}));
+    console.log('[定時任務] 開始檢查即將到期的訂閱 UTC: ' + now.toISOString() + ', 台北時間: ' + beijingTime.toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'}));
 
     const subscriptions = await getAllSubscriptions(env);
     console.log('[定時任務] 共找到 ' + subscriptions.length + ' 個訂閱');
@@ -3401,7 +3401,7 @@ export default {
   async scheduled(event, env, ctx) {
     const now = new Date();
     const beijingTime = new Date(now.getTime() + 8 * 60 * 60 * 1000);
-    console.log('[Workers] 定時任務觸發 UTC:', now.toISOString(), '台北時間:', beijingTime.toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai'}));
+    console.log('[Workers] 定時任務觸發 UTC:', now.toISOString(), '台北時間:', beijingTime.toLocaleString('zh-TW', {timeZone: 'Asia/Taipei'}));
     await checkExpiringSubscriptions(env);
   }
 };
