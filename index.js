@@ -1634,7 +1634,7 @@ const configPage = `
               </label>
               <label class="inline-flex items-center">
                 <input type="checkbox" name="enabledNotifiers" value="webhook" class="form-checkbox h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                <span class="ml-2 text-sm text-gray-700">企業微信應用通知</span>
+                <span class="ml-2 text-sm text-gray-700">Discord</span>
               </label>
               <label class="inline-flex items-center">
                 <input type="checkbox" name="enabledNotifiers" value="wechatbot" class="form-checkbox h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
@@ -1649,8 +1649,8 @@ const configPage = `
               <a href="https://www.notifyx.cn/" target="_blank" class="text-indigo-600 hover:text-indigo-800 text-sm">
                 <i class="fas fa-external-link-alt ml-1"></i> NotifyX官網
               </a>
-              <a href="https://push.wangwangit.com" target="_blank" class="text-indigo-600 hover:text-indigo-800 text-sm">
-                <i class="fas fa-external-link-alt ml-1"></i> 企業微信應用通知官網
+              <a href="https://discord.com/" target="_blank" class="text-indigo-600 hover:text-indigo-800 text-sm">
+                <i class="fas fa-external-link-alt ml-1"></i> Discord官網
               </a>
               <a href="https://developer.work.weixin.qq.com/document/path/91770" target="_blank" class="text-indigo-600 hover:text-indigo-800 text-sm">
                 <i class="fas fa-external-link-alt ml-1"></i> 企業微信機器人文檔
@@ -1695,12 +1695,12 @@ const configPage = `
           </div>
 
           <div id="webhookConfig" class="config-section">
-            <h4 class="text-md font-medium text-gray-900 mb-3">企業微信應用通知 配置</h4>
+            <h4 class="text-md font-medium text-gray-900 mb-3">Discord 通知 配置</h4>
             <div class="grid grid-cols-1 gap-4 mb-4">
               <div>
-                <label for="webhookUrl" class="block text-sm font-medium text-gray-700">企業微信應用通知 URL</label>
-                <input type="url" id="webhookUrl" placeholder="https://push.wangwangit.com/api/send/your-key" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                <p class="mt-1 text-sm text-gray-500">從 <a href="https://push.wangwangit.com" target="_blank" class="text-indigo-600 hover:text-indigo-800">企業微信應用通知平臺</a> 獲取的推送URL</p>
+                <label for="webhookUrl" class="block text-sm font-medium text-gray-700">Discord webhook URL</label>
+                <input type="url" id="webhookUrl" placeholder="https://discord.com/api/webhooks/channelID/key" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                <p class="mt-1 text-sm text-gray-500">從 <a href="https://discord.com/" target="_blank" class="text-indigo-600 hover:text-indigo-800">Discord</a> 獲取的推送URL</p>
               </div>
               <div>
                 <label for="webhookMethod" class="block text-sm font-medium text-gray-700">請求方法</label>
@@ -1723,7 +1723,7 @@ const configPage = `
             </div>
             <div class="flex justify-end">
               <button type="button" id="testWebhookBtn" class="btn-secondary text-white px-4 py-2 rounded-md text-sm font-medium">
-                <i class="fas fa-paper-plane mr-2"></i>測試 企業微信應用通知
+                <i class="fas fa-paper-plane mr-2"></i>測試 Discord通知
               </button>
             </div>
           </div>
@@ -1985,7 +1985,7 @@ const configPage = `
       const serviceName = type === 'telegram' ? 'Telegram' :
                           type === 'notifyx' ? 'NotifyX' :
                           type === 'wechatbot' ? '企業微信機器人' :
-                          type === 'email' ? '郵件通知' : '企業微信應用通知';
+                          type === 'email' ? '郵件通知' : 'Discord通知';
 
       button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>測試中...';
       button.disabled = true;
@@ -2017,7 +2017,7 @@ const configPage = `
         config.WEBHOOK_TEMPLATE = document.getElementById('webhookTemplate').value.trim();
 
         if (!config.WEBHOOK_URL) {
-          showToast('請先填寫 企業微信應用通知 URL', 'warning');
+          showToast('請先填寫 Discord webhook URL', 'warning');
           button.innerHTML = originalContent;
           button.disabled = false;
           return;
@@ -2292,10 +2292,10 @@ const api = {
           };
 
           const title = '測試通知';
-          const content = '這是一條測試通知，用於驗證企業微信應用通知功能是否正常工作。\n\n發送時間: ' + formatBeijingTime();
+          const content = '這是一條測試通知，用於驗證Discord webhook通知功能是否正常工作。\n\n發送時間: ' + formatBeijingTime();
 
           success = await sendWebhookNotification(title, content, testConfig);
-          message = success ? '企業微信應用通知發送成功' : '企業微信應用通知發送失敗，請檢查配置';
+          message = success ? 'Discord通知發送成功' : 'Discord通知發送失敗，請檢查配置';
          } else if (body.type === 'wechatbot') {
           const testConfig = {
             ...config,
@@ -2798,11 +2798,11 @@ async function testSingleSubscriptionNotification(id, env) {
 async function sendWebhookNotification(title, content, config) {
   try {
     if (!config.WEBHOOK_URL) {
-      console.error('[企業微信應用通知] 通知未配置，缺少URL');
+      console.error('[Discord通知] 通知未配置，缺少URL');
       return false;
     }
 
-    console.log('[企業微信應用通知] 開始發送通知到: ' + config.WEBHOOK_URL);
+    console.log('[Discord通知] 開始發送通知到: ' + config.WEBHOOK_URL);
 
     const timestamp = formatBeijingTime(new Date(), 'datetime');
     let requestBody;
@@ -2814,7 +2814,7 @@ async function sendWebhookNotification(title, content, config) {
         const customHeaders = JSON.parse(config.WEBHOOK_HEADERS);
         headers = { ...headers, ...customHeaders };
       } catch (error) {
-        console.warn('[企業微信應用通知] 自訂請求頭格式錯誤，使用預設請求頭');
+        console.warn('[Discord通知] 自訂請求頭格式錯誤，使用預設請求頭');
       }
     }
 
@@ -2828,7 +2828,7 @@ async function sendWebhookNotification(title, content, config) {
           .replace(/\{\{timestamp\}\}/g, timestamp);
         requestBody = JSON.parse(requestBody);
       } catch (error) {
-        console.warn('[企業微信應用通知] 消息範本格式錯誤，使用預設格式');
+        console.warn('[Discord通知] 消息範本格式錯誤，使用預設格式');
         requestBody = { title, content, timestamp };
       }
     } else {
@@ -2842,10 +2842,10 @@ async function sendWebhookNotification(title, content, config) {
     });
 
     const result = await response.text();
-    console.log('[企業微信應用通知] 發送結果:', response.status, result);
+    console.log('[Discord通知] 發送結果:', response.status, result);
     return response.ok;
   } catch (error) {
-    console.error('[企業微信應用通知] 發送通知失敗:', error);
+    console.error('[Discord通知] 發送通知失敗:', error);
     return false;
   }
 }
@@ -2962,7 +2962,7 @@ async function sendNotificationToAllChannels(title, commonContent, config, logPr
     if (config.ENABLED_NOTIFIERS.includes('webhook')) {
         const webhookContent = commonContent.replace(/(\**|\*|##|#|`)/g, '');
         const success = await sendWebhookNotification(title, webhookContent, config);
-        console.log(`${logPrefix} 發送企業微信應用通知 ${success ? '成功' : '失敗'}`);
+        console.log(`${logPrefix} 發送Discord通知 ${success ? '成功' : '失敗'}`);
     }
     if (config.ENABLED_NOTIFIERS.includes('wechatbot')) {
         const wechatbotContent = commonContent.replace(/(\**|\*|##|#|`)/g, '');
